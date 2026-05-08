@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula | Naju Araújo ENEM</title>
+  
+  <!-- Preconnect/DNS-prefetch -->
+  <link rel="preconnect" href="https://jiauidhoxuuzjdwegbyg.supabase.co">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://jiauidhoxuuzjdwegbyg.supabase.co">
+  
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/auth.js"></script>
+  <script type="module">
+    import { checkUser } from '/auth.js';
+    // Proteção de rota imediata
+    (async () => {
+        const user = await checkUser();
+        if (!user) return;
+        window.user = user;
+    })();
+  </script>
+  <style>
+    body { background-color: var(--dark-bg); }
+    
+    .player-nav {
+        background: rgba(9, 3, 20, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 1rem 4%;
+        border-bottom: 1px solid var(--glass-border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .player-container {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 2rem;
+        max-width: 1800px;
+        margin: 0 auto;
+        padding: 2rem 4%;
+    }
+
+    @media (max-width: 900px) {
+        .player-container { grid-template-columns: 1fr; }
+        .player-sidebar { position: static; height: auto; }
+    }
+
+    /* ---- MOBILE OTIMIZADO ---- */
+    @media (max-width: 768px) {
+        .player-nav {
+            padding: 0.8rem 4%;
+        }
+        .player-nav .logo {
+            font-size: 1.1rem;
+        }
+        .back-link {
+            font-size: 0.8rem !important;
+            padding: 0.5rem 0.9rem !important;
+        }
+
+        .player-container {
+            padding: 1rem 4% 6rem; /* espaço extra embaixo por causa dos btns fixos */
+            gap: 1.2rem;
+        }
+
+        .video-section {
+            border-radius: 12px;
+        }
+
+        .lesson-meta-box {
+            padding: 1.4rem;
+        }
+
+        .lesson-title {
+            font-size: 1.4rem !important;
+        }
+
+        .lesson-meta {
+            font-size: 0.8rem;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-description {
+            font-size: 0.95rem;
+        }
+
+        /* Botões de navegação fixos no rodapé no mobile */
+        .lesson-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(9, 3, 20, 0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--glass-border);
+            padding: 0.8rem 4%;
+            margin: 0;
+            border: none;
+            z-index: 999;
+        }
+
+        .nav-btns {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+
+        .nav-btns button {
+            flex: 1;
+            padding: 0.75rem 0.5rem !important;
+            font-size: 0.85rem !important;
+        }
+
+        /* Material item otimizado no mobile */
+        .material-item {
+            flex-direction: column;
+            align-items: stretch !important;
+            padding: 1.2rem;
+            gap: 1rem;
+        }
+
+        .material-item > span {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            white-space: normal;
+            line-height: 1.4;
+        }
+
+        .material-item > div {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            width: 100%;
+        }
+
+        .material-item > div a {
+            padding: 0.6rem 0 !important;
+            font-size: 0.85rem !important;
+            text-align: center;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Sidebar */
+        .player-sidebar {
+            height: auto !important;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.2rem;
+        }
+
+        .lesson-item {
+            padding: 1rem 1.4rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .lesson-title {
+            font-size: 1.2rem !important;
+        }
+        .player-container {
+            padding: 0.8rem 3% 6rem;
+        }
+    }
+
+    .video-section {
+        background: var(--dark-card);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+    }
+
+    .video-wrapper {
+        aspect-ratio: 16 / 9;
+        background: #000;
+    }
+
+    .video-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .lesson-meta-box {
+        padding: 2.5rem;
+    }
+
+    .lesson-title {
+        font-family: var(--font-display);
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        color: #fff;
+    }
+
+    .lesson-meta {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .lesson-meta span { color: var(--primary-light); font-weight: 600; }
+
+    .lesson-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 2rem;
+        border-top: 1px solid var(--glass-border);
+        margin-top: 2rem;
+    }
+
+    .nav-btns { display: flex; gap: 1rem; }
+
+    /* SIDEBAR */
+    .player-sidebar {
+        background: var(--dark-card);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        position: sticky;
+        top: 100px;
+        height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar-header {
+        padding: 2rem;
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    .sidebar-header h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    
+    .progress-track {
+        height: 4px;
+        background: var(--dark-bg);
+        border-radius: 2px;
+        margin-top: 1rem;
+        overflow: hidden;
+    }
+    .progress-fill { height: 100%; background: var(--primary); transition: 0.8s ease; }
+
+    .lessons-list {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 1rem 0;
+    }
+
+    .lesson-item {
+        padding: 1.25rem 2rem;
+        display: flex;
+        gap: 1.25rem;
+        cursor: pointer;
+        transition: 0.3s;
+        border-left: 3px solid transparent;
+    }
+
+    .lesson-item:hover { background: rgba(139, 92, 246, 0.05); }
+    .lesson-item.active { background: rgba(139, 92, 246, 0.1); border-left-color: var(--primary); }
+    .lesson-item.completed h4 { color: var(--text-muted); text-decoration: line-through; }
+
+    .lesson-status-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+    .completed .lesson-status-icon { background: var(--primary); border-color: var(--primary); color: white; }
+
+    /* Materials */
+    .material-item {
+        background: var(--dark-bg);
+        border: 1px solid var(--glass-border);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-decoration: none;
+        color: #ffffff;
+        margin-top: 1rem;
+        transition: 0.3s;
+    }
+    .material-item:hover { border-color: var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+    .btn-success { background: rgba(46, 213, 115, 0.2); color: #2ed573; border: 1px solid #2ed573; padding: 1rem 2rem; border-radius: 10px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <nav class="player-nav">
+    <h1 class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">NAJU <span>ARAÚJO</span></a></h1>
+    <a href="index.html" class="back-link btn btn-secondary">
+      ← Voltar
+    </a>
+  </nav>
+
+  <main class="player-container" style="opacity: 0; transition: opacity 0.3s ease;">
+    <!-- LADO ESQUERDO: VÍDEO E INFO -->
+    <div class="player-main">
+        <div class="video-section">
+            <div class="video-wrapper" style="display: none;">
+                <iframe id="videoPlayer" allowfullscreen></iframe>
+            </div>
+            
+            <div class="lesson-meta-box">
+                <h2 class="lesson-title" id="lessonTitle">...</h2>
+                <div class="lesson-meta" id="lessonMeta">...</div>
+                
+                <div class="lesson-description" id="lessonDescription"></div>
+
+                <!-- MATERIAIS -->
+                <div class="materials-box" id="materialsBox" style="display: none; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--divider);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">📎 Arquivos</h3>
+                    <div id="materialsList"></div>
+                </div>
+
+                <!-- AÇÕES -->
+                <div class="lesson-actions">
+                    <div class="nav-btns" style="width: 100%; display: flex; justify-content: space-between;">
+                        <button id="prevBtn" onclick="navigate(-1)" class="btn btn-secondary">← Anterior</button>
+                        <button id="nextBtn" onclick="navigate(1)" class="btn btn-secondary">Próxima →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LADO DIREITO: SIDEBAR -->
+    <aside class="player-sidebar">
+        <div class="sidebar-header">
+            <h1 id="productTitle" style="font-size: 1.2rem; margin-bottom: 0.5rem;">Naju Araújo ENEM</h1>
+            <div id="moduleProgress">...</div>
+        </div>
+        <div class="lessons-list" id="lessonsList">
+            <!-- Aulas via JS -->
+        </div>
+    </aside>
+  </main>
+
+  <script type="module" src="/player.js"></script>
+</body>
+</html>

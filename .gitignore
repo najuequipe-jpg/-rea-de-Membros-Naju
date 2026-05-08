@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Environment variables (credenciais sensíveis)
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Debug output
+db_test_output.json
+
+# Gemini/Antigravity
+.gemini/

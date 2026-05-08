@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar | Naju Araújo ENEM</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top right, #1e1035, var(--dark-bg));
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(139, 92, 246, 0.3);
+            filter: blur(100px);
+            top: -100px;
+            right: -100px;
+            opacity: 0.3;
+        }
+
+        .login-card {
+            background: rgba(19, 10, 36, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 3.5rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-logo {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 2.5rem;
+            text-decoration: none;
+            display: block;
+            letter-spacing: 4px;
+        }
+        .login-logo span { color: var(--primary-light); }
+
+        .login-header h1 {
+            color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            font-family: var(--font-display);
+        }
+
+        .login-header p {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-light);
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1.25rem;
+            background-color: rgba(9, 3, 20, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            background-color: rgba(9, 3, 20, 0.8);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-login:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            background: rgba(46, 213, 115, 0.1);
+            color: #2ed573;
+            border: 1px solid rgba(46, 213, 115, 0.3);
+            display: block;
+        }
+
+        .message.error {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            display: block;
+        }
+
+        .support-link {
+            margin-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+        .support-link:hover { color: var(--gold); }
+
+        /* ---- MOBILE ---- */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.2rem;
+                align-items: flex-start;
+                padding-top: 3rem;
+            }
+
+            .login-card {
+                padding: 2rem 1.5rem;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            }
+
+            .login-logo {
+                font-size: 2rem;
+                margin-bottom: 1.8rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .login-header p {
+                font-size: 0.95rem;
+                margin-bottom: 2rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-group input {
+                padding: 1rem;
+                font-size: 0.95rem;
+            }
+
+            .btn-login {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1 class="logo">NAJU <span>ARAÚJO</span></h1>
+            
+            <div class="login-header">
+                <h1>Área de Membros</h1>
+                <p>Insira seu e-mail de compra para acessar seus conteúdos.</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Seu e-mail</label>
+                    <input type="email" id="email" placeholder="seu-email@exemplo.com" required autocomplete="email">
+                </div>
+                <button type="submit" class="btn-login" id="submitBtn">Entrar Agora</button>
+            </form>
+
+            <div id="messageBox" class="message"></div>
+
+            <a href="https://wa.me/seunumerosaqui" target="_blank" class="support-link">Não consegue acessar? Chame o suporte no WhatsApp.</a>
+        </div>
+    </div>
+
+    <script type="module" src="/auth.js"></script>
+    <script type="module">
+        import { checkUser, login } from '/auth.js';
+
+        const loginForm = document.getElementById('loginForm');
+        const messageBox = document.getElementById('messageBox');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Proteção: Redireciona se já estiver logado
+        window.addEventListener('load', async () => {
+            await checkUser();
+        });
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!email) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span style="opacity: 0.7">Validando Acesso...</span>';
+            
+            const result = await login(email);
+            
+            messageBox.innerHTML = result.message;
+            messageBox.className = `message ${result.success ? 'success' : 'error'}`;
+            messageBox.style.display = 'block';
+            
+            if (result.success) {
+                submitBtn.innerHTML = 'Acesso Liberado!';
+                submitBtn.style.background = 'rgba(46, 213, 115, 0.2)';
+                submitBtn.style.color = '#2ed573';
+                submitBtn.style.border = '1px solid #2ed573';
+                
+                // Redirecionamento rápido
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Tentar Novamente";
+            }
+        });
+    </script>
+</body>
+</html>

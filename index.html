@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Área de Membros Premium | Naju Araújo — Sua jornada rumo à aprovação no ENEM.">
+  <title>Dashboard | Naju Araújo ENEM</title>
+  
+  <!-- Preconnect/DNS-prefetch -->
+  <link rel="preconnect" href="https://jiauidhoxuuzjdwegbyg.supabase.co">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://jiauidhoxuuzjdwegbyg.supabase.co">
+  
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/auth.js"></script>
+  <script type="module">
+    import { checkUser } from '/auth.js';
+    // Proteção de rota imediata
+    (async () => {
+        const user = await checkUser();
+        if (!user) return; // checkUser já redireciona
+        window.user = user;
+    })();
+  </script>
+  <style>
+    /* Estilos Adicionais Premium para a Home */
+    .module-card-expanded.locked img, .module-card-expanded.soon img {
+        filter: grayscale(1) brightness(0.3);
+    }
+    
+    .module-card-expanded.locked .module-cover-overlay, .module-card-expanded.soon .module-cover-overlay {
+        background: rgba(8, 14, 26, 0.4);
+    }
+
+    .lock-icon {
+        background: rgba(0,0,0,0.6);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-top: 1rem;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .soon-badge {
+        background: var(--gold-dark);
+        color: var(--bg-primary);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        margin-top: 1rem;
+    }
+
+    /* Menu Dropdown de Perfil */
+    .profile-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 15px);
+        right: 4%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--divider);
+        border-radius: 12px;
+        padding: 0.5rem 0;
+        min-width: 180px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+    }
+    
+    .profile-dropdown.show {
+        display: block;
+        animation: fadeInDown 0.2s ease forwards;
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .dropdown-item:hover {
+        background: rgba(201, 168, 76, 0.1);
+        color: var(--gold);
+    }
+    
+    .dropdown-item.logout {
+        color: #ff4757;
+    }
+    .dropdown-item.logout:hover {
+        background: rgba(255, 71, 87, 0.1);
+        color: #ff6b81;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-left">
+      <h1 class="logo">NAJU <span>ARAÚJO</span></h1>
+      <ul class="nav-links">
+        <li class="active"><a href="index.html">Início</a></li>
+        <li><a href="#modulos">Produtos</a></li>
+        <li><a href="https://www.instagram.com/najuaraujo/" target="_blank">Instagram</a></li>
+      </ul>
+    </div>
+    <div class="nav-right" style="position: relative;">
+      <div class="user-greeting" id="userNameLabel" style="font-size: 0.85rem; color: var(--text-secondary);">Carregando...</div>
+      <div class="profile-img" id="userProfile" onclick="document.getElementById('profileDropdown').classList.toggle('show')" style="cursor: pointer;" title="Menu do Usuário">👤</div>
+      
+      <!-- DROPDOWN DE PERFIL -->
+      <div class="profile-dropdown" id="profileDropdown">
+          <a href="#" onclick="document.getElementById('profileDropdown').classList.remove('show'); window.history.replaceState({}, '', 'index.html#modulos'); renderProducts(); return false;" class="dropdown-item">Meus Cursos</a>
+          <a href="#" onclick="auth.logout()" class="dropdown-item logout">Sair da Conta</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO BANNER -->
+  <header class="hero-banner">
+    <div class="hero-content">
+      <p class="hero-subtitle">Sua jornada para a aprovação no ENEM começa aqui.</p>
+      <h1 class="hero-title">Bem-vindo(a)!</h1>
+      
+      <div class="hero-tags">
+        <span class="tag">ENEM 2026</span>
+        <span class="tag">APROVAÇÃO</span>
+      </div>
+
+      <p class="hero-description">Foco e persistência são a chave do sucesso.</p>
+      
+      <div class="hero-buttons">
+        <a href="#modulos" onclick="window.history.replaceState({}, '', 'index.html#modulos'); renderProducts();" class="btn btn-primary">▶ Ver produtos</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MODULES SECTION -->
+  <main class="modules-container" id="modulos">
+    
+    <div class="section-header reveal">
+      <div>
+        <span class="section-label">Jornada completa</span>
+        <h2 class="section-title">Seus Conteúdos Exclusivos</h2>
+      </div>
+    </div>
+
+    <div class="modules-list" id="modulesGrid">
+      <!-- Módulos carregados dinamicamente via student.js -->
+      <div class="loader-placeholder" style="text-align: center; width: 100%; padding: 4rem;">
+         <span style="color: var(--gold); font-size: 1.2rem;">Carregando seu futuro...</span>
+      </div>
+    </div>
+
+  </main>
+
+
+  <script type="module" src="/script.js"></script>
+  <script type="module" src="/student.js"></script>
+  <script>
+    // Fechar dropdown de perfil ao clicar fora
+    window.addEventListener('click', function(e) {
+      if (!e.target.closest('#userProfile') && !e.target.closest('#profileDropdown')) {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
