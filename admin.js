@@ -187,7 +187,6 @@ async function loadSiteSettings() {
     document.getElementById('setHeroTitle').value = data.hero_title;
     document.getElementById('setHeroSubtitle').value = data.hero_subtitle;
     document.getElementById('setSupport').value = data.support_link || '';
-    document.getElementById('setInsta').value = data.instagram_link || '';
 }
 
 async function updateSettings(e) {
@@ -196,7 +195,6 @@ async function updateSettings(e) {
         hero_title: document.getElementById('setHeroTitle').value,
         hero_subtitle: document.getElementById('setHeroSubtitle').value,
         support_link: document.getElementById('setSupport').value,
-        instagram_link: document.getElementById('setInsta').value,
         updated_at: new Date()
     };
 
